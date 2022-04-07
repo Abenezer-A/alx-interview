@@ -1,24 +1,19 @@
-#!/usr/bin/python3
-"""pascal Triangle"""
+""" Pascal Triangle """
+
 
 def pascal_triangle(n):
+    """calculate pascal, return list"""
+    pascal_list = []
 
-    #iterate through every line and print entries in it.
-    for line in range(0, n):
+    if n <= 0:
+        return pascal_list
 
-        for i in range(0, line + 1):
-            print(binomialCoeff(line , i), " ", end = "")
-        print()
-
-def binomialCoeff(n, k) :
-    res = 1
-    if (k > n - k):
-        k = n -k
-    for i in range(0, k):
-     res = res * (n - i)
-     res = res // (i + 1)
-
-    return res
-
-n = 7
-pascal_triangle(n)
+    for i in range(n):
+        temp_list = []
+        for j in range(i + 1):
+            if (j == 0 or j == i):
+                temp_list.append(1)
+            else:
+                temp_list.append(pascal_list[i-1][j-1] + pascal_list[i-1][j])
+        pascal_list.append(temp_list)
+    return pascal_list
