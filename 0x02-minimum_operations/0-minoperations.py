@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-"""minimum time time to write operations of copy and paste"""
+""" minimum operation to reach """
 
 
 def minOperations(n):
