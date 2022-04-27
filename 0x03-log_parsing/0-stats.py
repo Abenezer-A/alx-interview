@@ -1,49 +1,43 @@
 #!/usr/bin/python3
-
 """
-A script that reads stdin line by line and computes stats
+Python script takes URL from stdin and compute exact metrics
 """
 
-import sys
 
-if __name__ == "__main__":
-    st_code = {"200": 0,
-               "301": 0,
-               "400": 0,
-               "401": 0,
-               "403": 0,
-               "404": 0,
-               "405": 0,
-               "500": 0}
+def printst(dictionary, size):
+    """
+    Print function
+    """
+    d = sorted(dictionary.keys())
+    print("File size: {:d}".format(size))
+    for i in d:
+        if dictionary[i] != 0:
+            print("{}: {:d}".format(i, dictionary[i]))
 
-    count = 1
-    file_size = 0
+count = 0
+size = 0
+dic = {"200": 0, "301": 0, "400": 0, "401": 0,
+       "403": 0, "404": 0, "405": 0, "500": 0}
 
-    def parse_line(line):
-        # Read, parse and get data
-        try:
-            parsed_line = line.split()
-            status_code = parsed_line[-2]
-            if status_code in st_code.keys():
-                st_code[status_code] += 1
-            return int(parsed_line[-1])
-        except Exception:
-            return 0
-
-    def print_stats():
-        # Print status in ascending order
-        print("File size: {}".format(file_size))
-        for key in sorted(st_code.keys()):
-            if st_code[key]:
-                print("{}: {}".format(key, st_code[key]))
-
-    try:
-        for line in sys.stdin:
-            file_size += parse_line(line)
-            if count % 10 == 0:
-                print_stats()
+try:
+    with open(0) as f:
+        for line in f:
             count += 1
-    except KeyboardInterrupt:
-        print_stats()
-        raise
-    print_stats()
+            arr = line.split()
+            try:
+                size += int(arr[-1])
+            except:
+                pass
+            try:
+                st = arr[-2]
+                if st in dic:
+                    dic[st] += 1
+            except:
+                pass
+            if count % 10 == 0:
+                printst(dic, size)
+        printst(dic, size)
+
+except KeyboardInterrupt:
+    printst(dic, size)
+    raise
