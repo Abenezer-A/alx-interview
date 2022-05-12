@@ -1,61 +1,51 @@
 #!/usr/bin/python3
-"""Solution to the N-Queens puzzle"""
-import sys
+"""program that solves the N queens problem."""
+from sys import argv, exit
 
 
-def print_board(board, n):
-    """prints allocated possitions to the queen"""
-    b = []
-
-    for i in range(n):
-        for j in range(n):
-            if j == board[i]:
-                b.append([i, j])
-    print(b)
-
-
-def safe_position(board, i, j, r):
-    """Determines whether the position is safe for the queen"""
-    if (board[i] == j) or (board[i] == j - i + r) or (board[i] == i - r + j):
-        return True
-    return False
-
-
-def determine_positions(board, row, n):
-    """Recursively finds all safe positions where the queen can be allocated"""
-    if row == n:
-        print_board(board, n)
-
-    else:
-        for j in range(n):
-            allowed = True
-            for i in range(row):
-                if safe_position(board, i, j, row):
-                    allowed = False
-            if allowed:
-                board[row] = j
-                determine_positions(board, row + 1, n)
-
-
-def create_board(size):
-    """Generates the board"""
-    return [0 * size for i in range(size)]
-
-
-if len(sys.argv) != 2:
+if len(argv) != 2:
     print("Usage: nqueens N")
     exit(1)
 
+N = argv[1]
+
 try:
-    n = int(sys.argv[1])
-except BaseException:
+    N = int(N)
+except ValueError:
     print("N must be a number")
     exit(1)
 
-if (n < 4):
+if N < 4:
     print("N must be at least 4")
     exit(1)
 
-board = create_board(int(n))
-row = 0
-determine_positions(board, row, int(n))
+solution = []
+
+
+def nqueens(row, N, solution):
+    """The program should print any possible solution"""
+    if (row == N):
+        print(solution)
+    else:
+        for col in range(N):
+            position = [row, col]
+            if validposition(solution, position):
+                solution.append(position)
+                nqueens(row + 1, N, solution)
+                solution.remove(position)
+
+
+def validposition(solution, position):
+    """validate horizontal and diagonal position of queens"""
+    for queen in solution:
+        if queen[1] == position[1]:
+            return False
+        # descending diagonal
+        if (queen[0] - queen[1]) == (position[0] - position[1]):
+            return False
+        # ascending diagonal
+        if (queen[0] + queen[1]) == (position[0] + position[1]):
+            return False
+    return True
+
+nqueens(0, N, solution)
